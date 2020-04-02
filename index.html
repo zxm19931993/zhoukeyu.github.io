@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            height: 100%;
+        }
+
+        #container {
+            position: relative;
+            height: 100%;
+        }
+
+        #leafContainer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        #leafContainer>div {
+            position: absolute;
+            border: none;
+            -webkit-animation-iteration-count: infinite;
+            -webkit-animation-direction: normal;
+            -webkit-animation-timing-function: linear;
+        }
+
+
+        #leafContainer>div>img {
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            /* background: red; */
+            border: none;
+            -webkit-animation-iteration-count: infinite;
+            -webkit-animation-direction: alternate;
+            -webkit-animation-timing-function: ease-in-out;
+            -webkit-transform-origin: 50% -100%;
+        }
+
+
+        @-webkit-keyframes fade {
+
+            0% {
+                opacity: 1;
+            }
+
+            95% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+
+        @-webkit-keyframes drop {
+
+            0% {
+                -webkit-transform: translate(0px, -50px);
+            }
+
+            100% {
+                -webkit-transform: translate(0px, 700px);
+            }
+        }
+
+        @-webkit-keyframes clockwiseSpin {
+            0% {
+                -webkit-transform: rotate(-50deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(50deg);
+            }
+        }
+
+        @-webkit-keyframes counterclockwiseSpinAndFlip {
+
+            0% {
+                -webkit-transform: scale(-1, 1) rotate(50deg);
+            }
+
+            100% {
+                -webkit-transform: scale(-1, 1) rotate(-50deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 
+       1. 说明  animation动画 兼容不好，需要使用webkit兼容
+       2. leafContainer下创建了30个box，用作下落动画，然后在box建立img，用于左右旋转，感觉像自由落体
+       3.高度这些我是取得body得100%；-webkit-transform: translate(0px, 700px); 运动高度是700，你自己改
+    -->
+    <div id="container">
+        <div id="leafContainer"></div>
+    </div>
+    <script>
+        var number = 30;
+        init()
+        function init() {
+
+            var container = document.getElementById('leafContainer');
+
+            for (var i = 0; i < number; i++) {
+                container.appendChild(createALeaf());
+            }
+        }
+
+        // 随机整数
+        function randomInteger(low, high) {
+            return low + Math.floor(Math.random() * (high - low));
+        }
+
+        // 随机小数
+        function randomFloat(low, high) {
+            return low + Math.random() * (high - low);
+        }
+
+
+        function createALeaf() {
+            var sHeight = window.screen.height
+            var sWidth = window.screen.width
+            var leafDiv = document.createElement('div');
+            var image = document.createElement('img');
+
+            // 图片地址  
+             image.src = './铜钱.png';   
+
+            leafDiv.style.top = "-50px";
+            leafDiv.style.left = randomInteger(0, sWidth) + 'px';
+            var spinAnimationName = (Math.random() < 0.5) ? 'clockwiseSpin' : 'counterclockwiseSpinAndFlip';
+
+            leafDiv.style.webkitAnimationName = 'fade,drop';
+            image.style.webkitAnimationName = spinAnimationName;
+
+            var fadeAndDropDuration = randomFloat(5, 11) + 's';
+
+            var spinDuration = randomFloat(4, 8) + 's';
+
+            leafDiv.style.webkitAnimationDuration = fadeAndDropDuration + ', ' + fadeAndDropDuration;
+
+            var leafDelay = randomFloat(0, 5) + 's';
+            leafDiv.style.webkitAnimationDelay = leafDelay + ', ' + leafDelay;
+
+            image.style.webkitAnimationDuration = spinDuration;
+
+            leafDiv.appendChild(image);
+
+            return leafDiv;
+        }
+
+       
+    </script>
+</body>
+
+</html>
